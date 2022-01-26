@@ -1,12 +1,9 @@
 const express = require("express");
+const {getAllItems, getItem, createItem, updateItem, deleteItem} = require("../controllers/itemController");
 
 const router = express.Router();
 
-router.get("/api/items", (req, res) => {
-    res.json({
-        success: true,
-        massage: "Memanggil semua data items",
-    });
-});
+router.route('/').get(getAllItems).post(createItem);
+router.route('/:id').get(getItem).put(updateItem).delete(deleteItem);
 
 module.exports = router;

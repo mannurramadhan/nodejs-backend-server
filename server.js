@@ -5,7 +5,7 @@ const app = express();
 
 const itemRoutes = require("./routes/itemRoutes");
 
-app.use(itemRoutes);
+app.use("/api/item", itemRoutes);
 
 app.get("/", (req, res) => {
     res.send("Bonjour le monde");
