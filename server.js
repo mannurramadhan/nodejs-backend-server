@@ -5,6 +5,13 @@ const app = express();
 
 const itemRoutes = require("./routes/itemRoutes");
 
+app.use((req, res, next) => {
+    req.hello = "Bonjour le monde";
+    console.log("This is middleware");
+
+    next();
+});
+
 app.use("/api/item", itemRoutes);
 
 app.get("/", (req, res) => {
