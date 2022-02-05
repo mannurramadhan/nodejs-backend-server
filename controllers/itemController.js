@@ -5,12 +5,20 @@ const Item = require("../models/itemModel");
 @route  GET /api/items
 @access public
 */
-exports.getAllItems = (req, res, next) => {
-    res.status(200).json({
-        success: true,
-        message: "Berhasil mengambil semua data item",
-        middleware: req.hello,
-    });
+exports.getAllItems = async (req, res, next) => {
+    try {
+        const item = await Item.findAll();
+        res.status(200).json({
+            success: true,
+            message: "Semua data item berhasil dipanggil",
+            data: item,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Terjadi sebuah kesalahan yang tak terduga pada server",
+        });
+    }
 };
 
 /*
@@ -18,11 +26,26 @@ exports.getAllItems = (req, res, next) => {
 @route  GET /api/items/id
 @access public
 */
-exports.getItem = (req, res, next) => {
-    res.status(200).json({
-        success: true,
-        message: `Berhasil mengambil data item dengan id = ${req.params.id}`,
-    });
+exports.getItem = async (req, res, next) => {
+    try {
+        const item = await Item.findByPk(req.params.id);
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: "Data item tidak ditemukan",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: `Data item dengan id = ${req.params.id} berhasil dipanggil`,
+            data: item,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
 
 /*
