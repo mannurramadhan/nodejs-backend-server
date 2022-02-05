@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
-const sequelize = require('./utils/database');
+const sequelize = require("./utils/database");
+require("./models/itemModel");
 const itemRoutes = require("./routes/itemRoutes");
 
 const app = express();
@@ -20,12 +21,19 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 4000;
 
-sequelize.authenticate().then(() => {
-    console.log('Database has connected!');
-    app.listen(
-        PORT,
-        console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`)
-    );
-}).catch(() => {
-    console.log('Database disconnected!');
-});
+sequelize
+    .authenticate()
+    .then(() => {
+        sequelize.sync().then(() => {
+            console.log("Database has connected!");
+            app.listen(
+                PORT,
+                console.log(
+                    `Server running in ${process.env.NODE_ENV} on port ${PORT}`
+                )
+            );
+        });
+    })
+    .catch(() => {
+        console.log("Database disconnected!");
+    });
