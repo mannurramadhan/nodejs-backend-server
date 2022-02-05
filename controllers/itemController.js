@@ -104,9 +104,25 @@ exports.updateItem = async (req, res, next) => {
 @route  DELETE /api/items
 @access public
 */
-exports.deleteItem = (req, res, next) => {
-    res.status(200).json({
-        success: true,
-        message: `Berhasil menghapus data item dengan id = ${req.params.id}`,
-    });
+exports.deleteItem = async (req, res, next) => {
+    try {
+        const item = await Item.findByPk(req.params.id);
+        if (!item) {
+            res.status(404).json({
+                success: false,
+                message: "Data item tidak ditemukan",
+            });
+        }
+        await (await item).destroy();
+
+        res.status(200).json({
+            success: true,
+            message: `Data item dengan id = ${req.params.id} berhasil dihapus`,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Terjadi sebuah kesalahan yang tak terduga pada server",
+        });
+    }
 };
