@@ -1,3 +1,5 @@
+const Item = require("../models/itemModel");
+
 /*
 @desc   Mengambil semua data item
 @route  GET /api/items
@@ -28,11 +30,20 @@ exports.getItem = (req, res, next) => {
 @route  POST /api/items
 @access public
 */
-exports.createItem = (req, res, next) => {
-    res.status(200).json({
-        success: true,
-        message: "Berhasil membuat data item baru",
-    });
+exports.createItem = async (req, res, next) => {
+    try {
+        const item = await Item.create(req.body);
+        res.status(200).json({
+            success: true,
+            message: "Data item baru berhasil ditambahkan",
+            data: item,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
 
 /*

@@ -6,6 +6,8 @@ const itemRoutes = require("./routes/itemRoutes");
 
 const app = express();
 
+app.use(express.json());
+
 app.use((req, res, next) => {
     req.hello = "Bonjour le monde";
     console.log("This is middleware");
